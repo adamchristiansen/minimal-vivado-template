@@ -1,12 +1,12 @@
 `timescale 1ns / 1ps
 
-module top_tb();
+module main_tb();
 
     logic clk = 0;
     logic [3:0] sw = 4'b0000;
     logic [3:0] led;
 
-    top top_dut(
+    main main_dut(
         .clk(clk),
         .sw(sw),
         .led(led)
