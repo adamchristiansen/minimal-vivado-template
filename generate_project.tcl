@@ -29,13 +29,13 @@ set target_language "Verilog"
 # contains the top module, but the name of the module itself (in the code).
 # This can be set to an empty string to let the tools decide the top module
 # automatically.
-set top_module "top"
+set top_module ""
 
 # This is the name of the top module to use in simulation. This is not the name
 # of the file that contains the top module, but the name of the module itself
 # (in the code). This can be set to an empty string to let the tools decide the
 # top module automatically.
-set top_sim_module "top_tb"
+set top_sim_module ""
 
 # The root path that all other paths are to be specified with. This is by
 # default the path to the directory that this script is in, and it is not
