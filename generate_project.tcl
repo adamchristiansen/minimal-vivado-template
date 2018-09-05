@@ -42,9 +42,6 @@ set top_sim_module ""
 # recommended that this be changed.
 set origin_dir [file dirname [file normalize [info script]]]
 
-# The directory that Tcl script files are located.
-set tcl_dir "$origin_dir/tcl"
-
 # The directory that the constraints source files are located.
 set constraints_dir "$origin_dir/src/constraints"
 
@@ -90,29 +87,6 @@ set message_severities {
     { "Synth 8-6014"        "INFO"     }
     { "Timing 38-316"       "INFO"     }
 }
-
-# These are scripts that can be hooked into at certain stages of the build.
-# These are entirely optional, and will only be used if they exist.
-# Synthesis
-set synth_design_pre  "$tcl_dir/synth_design_pre.tcl"
-set synth_design_post "$tcl_dir/synth_design_post.tcl"
-# Implementation
-set opt_design_pre                   "$tcl_dir/opt_design_pre.tcl"
-set opt_design_post                  "$tcl_dir/opt_design_post.tcl"
-set phys_opt_design_pre              "$tcl_dir/phys_opt_design_pre.tcl"
-set phys_opt_design_post             "$tcl_dir/phys_opt_design_post.tcl"
-set place_design_pre                 "$tcl_dir/place_design_pre.tcl"
-set place_design_post                "$tcl_dir/place_design_post.tcl"
-set power_opt_design_pre             "$tcl_dir/power_opt_design_pre.tcl"
-set power_opt_design_post            "$tcl_dir/power_opt_design_post.tcl"
-set post_place_power_opt_design_pre  "$tcl_dir/post_place_power_opt_design_pre.tcl"
-set post_place_power_opt_design_post "$tcl_dir/post_place_power_opt_design_post.tcl"
-set post_route_phys_opt_design_pre   "$tcl_dir/post_route_phys_opt_design_pre.tcl"
-set post_route_phys_opt_design_post  "$tcl_dir/post_route_phys_opt_design_post.tcl"
-set route_design_pre                 "$tcl_dir/route_design_pre.tcl"
-set route_design_post                "$tcl_dir/route_design_post.tcl"
-set write_bitstream_pre              "$tcl_dir/write_bitstream_pre.tcl"
-set write_bitstream_post             "$tcl_dir/write_bitstream_post.tcl"
 
 #-------------------------------------------------------------------------------
 # Create Project
@@ -202,13 +176,6 @@ set_property part $part_number $obj
 set_property report_strategy $synthesis_report_strategy $obj
 set_property strategy $synthesis_strategy $obj
 
-if { [file exists "$synth_design_pre"] } {
-    set_property steps.opt_design.tcl.pre "$synth_design_pre" $obj
-}
-if { [file exists "$synth_design_post"] } {
-    set_property steps.opt_design.tcl.post "$synth_design_post" $obj
-}
-
 current_run -synthesis $obj
 
 #-------------------------------------------------------------------------------
@@ -228,55 +195,6 @@ set_property part $part_number $obj
 set_property report_strategy $implementation_report_strategy $obj
 set_property steps.write_bitstream.args.bin_file 1 $obj
 set_property strategy $implementation_strategy $obj
-
-if { [file exists "$opt_design_pre"] } {
-    set_property steps.opt_design.tcl.pre "$opt_design_pre" $obj
-}
-if { [file exists "$opt_design_post"] } {
-    set_property steps.opt_design.tcl.post "$opt_design_post" $obj
-}
-if { [file exists "$phys_opt_design_pre"] } {
-    set_property steps.phys_opt_design.tcl.pre "$phys_opt_design_pre" $obj
-}
-if { [file exists "$phys_opt_design_post"] } {
-    set_property steps.phys_opt_design.tcl.post "$phys_opt_design_post" $obj
-}
-if { [file exists "$place_design_pre"] } {
-    set_property steps.place_design.tcl.pre "$place_design_pre" $obj
-}
-if { [file exists "$place_design_post"] } {
-    set_property steps.place_design.tcl.post "$place_design_post" $obj
-}
-if { [file exists "$power_opt_design_pre"] } {
-    set_property steps.power_opt_design.tcl.pre "$power_opt_design_pre" $obj
-}
-if { [file exists "$power_opt_design_post"] } {
-    set_property steps.power_opt_design.tcl.post "$power_opt_design_post" $obj
-}
-if { [file exists "$post_place_power_opt_design_pre"] } {
-    set_property steps.post_place_power_opt_design.tcl.pre "$post_place_power_opt_design_pre" $obj
-}
-if { [file exists "$post_place_power_opt_design_post"] } {
-    set_property steps.post_place_power_opt_design.tcl.post "$post_place_power_opt_design_post" $obj
-}
-if { [file exists "$post_route_phys_opt_design_pre"] } {
-    set_property steps.post_route_phys_opt_design.tcl.pre "$post_route_phys_opt_design_pre" $obj
-}
-if { [file exists "$post_route_phys_opt_design_post"] } {
-    set_property steps.post_route_phys_opt_design.tcl.post "$post_route_phys_opt_design_post" $obj
-}
-if { [file exists "$route_design_pre"] } {
-    set_property steps.route_design.tcl.pre "$route_design_pre" $obj
-}
-if { [file exists "$route_design_post"] } {
-    set_property steps.route_design.tcl.post "$route_design_post" $obj
-}
-if { [file exists "$write_bitstream_pre"] } {
-    set_property steps.write_bitstream.tcl.pre "$write_bitstream_pre" $obj
-}
-if { [file exists "$write_bitstream_post"] } {
-    set_property steps.write_bitstream.tcl.post "$write_bitstream_post" $obj
-}
 
 current_run -implementation $obj
 
