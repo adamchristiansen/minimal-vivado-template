@@ -82,13 +82,13 @@ set implementation_strategy "Vivado Implementation Defaults"
 # like a list of tuples where the first element in tuple is the message ID and
 # the second is the new severity for it.
 set message_severities {
-    { "Power 33-332"  "INFO"     }
-    { "Synth 8-3331"  "ADVISORY" }
-    { "Synth 8-3332"  "INFO"     }
-    { "Synth 8-5210"  "INFO"     }
-    { "Synth 8-5858"  "INFO"     }
-    { "Synth 8-6014"  "INFO"     }
-    { "Timing 38-316" "INFO"     }
+    { "Constraints 18-5210" "INFO"     }
+    { "Power 33-332"        "INFO"     }
+    { "Synth 8-3331"        "ADVISORY" }
+    { "Synth 8-3332"        "INFO"     }
+    { "Synth 8-5858"        "INFO"     }
+    { "Synth 8-6014"        "INFO"     }
+    { "Timing 38-316"       "INFO"     }
 }
 
 # These are scripts that can be hooked into at certain stages of the build.
