@@ -85,6 +85,7 @@ set message_severities {
     { "Power 33-332"  "INFO"     }
     { "Synth 8-3331"  "ADVISORY" }
     { "Synth 8-3332"  "INFO"     }
+    { "Synth 8-5210"  "INFO"     }
     { "Synth 8-5858"  "INFO"     }
     { "Synth 8-6014"  "INFO"     }
     { "Timing 38-316" "INFO"     }
