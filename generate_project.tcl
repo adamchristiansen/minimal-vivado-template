@@ -1,14 +1,14 @@
 # This script is used to create the Vivado project from everything in the /src
 # directory beside this script.
 #
-# To use this script, open Xilinx Vivado and select `Tools > Run Tcl Script...`,
+# To use this script, open Xilinx Vivado and select `Tools > Run Tcl Script...`
 # then select the `generate_project.tcl` script in the file exporer. The script
 # will run and produce the Vivado project by importing all of the project
 # sources.
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Parameters
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # All of the main parameters that can be configured are set in this section.
 # These can be changed as desired.
@@ -57,12 +57,12 @@ set repo_dir "$origin_dir/src/repo"
 # The directory that the simulation files are located.
 set sim_dir "$origin_dir/src/sim"
 
-# The directory that the Vivado project will be generated in. All Vivado project
-# files will be stored in this directory.
+# The directory that the Vivado project will be generated in. All Vivado
+# project files will be stored in this directory.
 set project_dir "$origin_dir/proj"
 
-# Get the year from the Vivado version. This is used for automatically selecting
-# the synthesis and implementation strategies.
+# Get the year from the Vivado version. This is used for automatically
+# selecting the synthesis and implementation strategies.
 set year [lindex [split [version -short] .] 0]
 
 # The strategies and flows to use in synthesis.
@@ -75,9 +75,9 @@ set implementation_flow "Vivado Implementation ${year}"
 set implementation_report_strategy "Vivado Implementation Default Reports"
 set implementation_strategy "Vivado Implementation Defaults"
 
-# This is a list of messages whose severities should be changed. This is treated
-# like a list of tuples where the first element in tuple is the message ID and
-# the second is the new severity for it.
+# This is a list of messages whose severities should be changed. This is
+# treated like a list of tuples where the first element in tuple is the message
+# ID and the second is the new severity for it.
 set message_severities {
     { "Constraints 18-5210" "INFO"     }
     { "Power 33-332"        "INFO"     }
@@ -88,9 +88,9 @@ set message_severities {
     { "Timing 38-316"       "INFO"     }
 }
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Create Project
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # This part of the script creates a new project in the proj/ directory relative
 # to this script.
@@ -113,7 +113,8 @@ set_property part $part_number $obj
 set_property simulator_language $simulator_language $obj
 set_property target_language $target_language $obj
 
-# Create 'constrs_1' fileset if it does not exist, and add the constraints files
+# Create 'constrs_1' fileset if it does not exist, and add the constraints
+# files
 if { [string equal [get_filesets -quiet constrs_1] ""] } {
     create_fileset -constrset constrs_1
 }
@@ -159,9 +160,9 @@ if { [file isdirectory $repo_dir] == 1 } {
     set_property ip_repo_paths $repo_dir $obj
 }
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Synthesis
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # Create 'synth_1' run if it does not exist, then set the synthesis parameters
 # and mark 'synth_1' as the current synthesis run.
@@ -178,9 +179,9 @@ set_property strategy $synthesis_strategy $obj
 
 current_run -synthesis $obj
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Implementation
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # Create 'impl_1' run if it does not exist, then set the implementation
 # parameters and mark 'impl_1' as the current implementation run.
@@ -197,227 +198,3 @@ set_property steps.write_bitstream.args.bin_file 1 $obj
 set_property strategy $implementation_strategy $obj
 
 current_run -implementation $obj
-
-#-------------------------------------------------------------------------------
-# Implementation Reports
-#-------------------------------------------------------------------------------
-
-# Create 'impl_1_init_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_init_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_init_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps init_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_init_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_opt_report_drc_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_opt_report_drc_0] ""] } {
-    create_report_config -report_name impl_1_opt_report_drc_0 -report_type report_drc:1.0 -steps opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_opt_report_drc_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_opt_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_opt_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_opt_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_opt_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_power_opt_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_power_opt_report_timing_summary_0] ""] } {
-  create_report_config -report_name impl_1_power_opt_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps power_opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_power_opt_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_io_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_io_0] ""] } {
-    create_report_config -report_name impl_1_place_report_io_0 -report_type report_io:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_io_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_utilization_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_utilization_0] ""] } {
-    create_report_config -report_name impl_1_place_report_utilization_0 -report_type report_utilization:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_utilization_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_control_sets_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_control_sets_0] ""] } {
-    create_report_config -report_name impl_1_place_report_control_sets_0 -report_type report_control_sets:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_control_sets_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_incremental_reuse_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_incremental_reuse_0] ""] } {
-    create_report_config -report_name impl_1_place_report_incremental_reuse_0 -report_type report_incremental_reuse:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_incremental_reuse_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_incremental_reuse_1' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_incremental_reuse_1] ""] } {
-  create_report_config -report_name impl_1_place_report_incremental_reuse_1 -report_type report_incremental_reuse:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_incremental_reuse_1]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_place_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_place_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps place_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_place_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_post_place_power_opt_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_post_place_power_opt_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_post_place_power_opt_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps post_place_power_opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_place_power_opt_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_phys_opt_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_phys_opt_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_phys_opt_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps phys_opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_phys_opt_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_drc_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_drc_0] ""] } {
-    create_report_config -report_name impl_1_route_report_drc_0 -report_type report_drc:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_drc_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_methodology_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_methodology_0] ""] } {
-    create_report_config -report_name impl_1_route_report_methodology_0 -report_type report_methodology:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_methodology_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_power_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_power_0] ""] } {
-    create_report_config -report_name impl_1_route_report_power_0 -report_type report_power:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_power_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_route_status_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_route_status_0] ""] } {
-    create_report_config -report_name impl_1_route_report_route_status_0 -report_type report_route_status:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_route_status_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_timing_summary_0] ""] } {
-    create_report_config -report_name impl_1_route_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_incremental_reuse_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_incremental_reuse_0] ""] } {
-    create_report_config -report_name impl_1_route_report_incremental_reuse_0 -report_type report_incremental_reuse:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_incremental_reuse_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_clock_utilization_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_clock_utilization_0] ""] } {
-    create_report_config -report_name impl_1_route_report_clock_utilization_0 -report_type report_clock_utilization:1.0 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_clock_utilization_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_route_report_bus_skew_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_bus_skew_0] ""] } {
-    create_report_config -report_name impl_1_route_report_bus_skew_0 -report_type report_bus_skew:1.1 -steps route_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_route_report_bus_skew_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_post_route_phys_opt_report_timing_summary_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_timing_summary_0] ""] } {
-  create_report_config -report_name impl_1_post_route_phys_opt_report_timing_summary_0 -report_type report_timing_summary:1.0 -steps post_route_phys_opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_timing_summary_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
-
-# Create 'impl_1_post_route_phys_opt_report_bus_skew_0' report (if not found)
-if { [string equal [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_bus_skew_0] ""] } {
-    create_report_config -report_name impl_1_post_route_phys_opt_report_bus_skew_0 -report_type report_bus_skew:1.1 -steps post_route_phys_opt_design -runs impl_1
-}
-set obj [get_report_configs -of_objects [get_runs impl_1] impl_1_post_route_phys_opt_report_bus_skew_0]
-if { $obj != "" } {
-    # Uncomment the following line to disable the report
-    #set_property is_enabled 0 $obj
-}
